@@ -2,18 +2,31 @@ import { CardCurrency, CreditCardType, SimpleCardType, getCreditCards } from "@/
 import { currencyValueInCents } from "./lib/currencyValueInCents";
 
 export type OfferType = CreditCardType['offers'][number];
+export type CreditType = CreditCardType['credits'][number];
 export type recommendationType = {
   name: string;
   netValue: number;}
 
-function calculateMaxBonus(offers: OfferType[], upcomingSpend: number, defaultCurrency: CardCurrency): number {
+function getValueFromCredits(credits: CreditType[], defaultCurrency: CardCurrency): number {
+    let totalValue = 0;
+
+    for (const credit of credits) {
+        const currency = credit.currency || defaultCurrency;
+        totalValue += credit.value * credit.weight * currencyValueInCents[currency] / 100;
+    }
+
+    return totalValue;
+}
+
+function getMaxValueFromOffers(offers: OfferType[], upcomingSpend: number, defaultCurrency: CardCurrency): number {
     let maxBonus = 0;
     
     for (const offer of offers) {
         if (upcomingSpend >= offer.spend) {
             const offerAmountOptions = offer.amount.map((amount) => {
                 const currency = amount.currency || defaultCurrency;
-                return amount.amount * currencyValueInCents[currency] / 100;
+                const baseValue = amount.amount * currencyValueInCents[currency] / 100;
+                return baseValue + getValueFromCredits(offer.credits || [], currency);
             });
             maxBonus = Math.max(maxBonus, Math.max(...offerAmountOptions));
         }
@@ -32,8 +45,9 @@ export async function recommendCreditCard(currentCards: SimpleCardType[], upcomi
     // for each card, check the offers to see if there's signup bonus and rewards that can be earned
     const recommendations = eligibleCards.map((card) => {
         const signupBonus =
-            calculateMaxBonus(card.offers, upcomingSpend, card.currency);
-        const netValue = signupBonus - card.annualFee;
+            getMaxValueFromOffers(card.offers, upcomingSpend, card.currency);
+        const creditsValue = getValueFromCredits(card.credits || [], card.currency);
+        const netValue = signupBonus + creditsValue - card.annualFee;
     return { name: card.name, netValue};
   });
 
