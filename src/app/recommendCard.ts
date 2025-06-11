@@ -1,4 +1,5 @@
 import { CardCurrency, CreditCardType, SimpleCardType, getCreditCards } from "@/app/lib/data";
+import { currencyValueInCents } from "./lib/currencyValueInCents";
 
 export type OfferType = CreditCardType['offers'][number];
 export type recommendationType = {
@@ -12,13 +13,7 @@ function calculateMaxBonus(offers: OfferType[], upcomingSpend: number, defaultCu
         if (upcomingSpend >= offer.spend) {
             const offerAmountOptions = offer.amount.map((amount) => {
                 const currency = amount.currency || defaultCurrency;
-                if (currency === 'USD') {
-                    // If the currency is USD or not specified, return the amount
-                    return amount.amount;
-                } else {
-                    // TODO: Assign points value based on currency
-                    return amount.amount / 100;
-                }
+                return amount.amount * currencyValueInCents[currency] / 100;
             });
             maxBonus = Math.max(maxBonus, Math.max(...offerAmountOptions));
         }
