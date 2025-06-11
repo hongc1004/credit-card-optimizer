@@ -40,7 +40,7 @@ export async function recommendCreditCard(currentCards: SimpleCardType[], upcomi
 
     const currentCardIds = currentCards.map(card => card.cardId);
     const eligibleCards = creditCards.filter(
-        (card) => !currentCardIds.includes(card.cardId)
+        (card) => !currentCardIds.includes(card.cardId) && card.discontinued !== true
     );
     // for each card, check the offers to see if there's signup bonus and rewards that can be earned
     const recommendations = eligibleCards.map((card) => {
