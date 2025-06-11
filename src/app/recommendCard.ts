@@ -47,7 +47,7 @@ export async function recommendCreditCard(currentCards: SimpleCardType[], upcomi
         const signupBonus =
             getMaxValueFromOffers(card.offers, upcomingSpend, card.currency);
         const creditsValue = getValueFromCredits(card.credits || [], card.currency);
-        const netValue = signupBonus + creditsValue - card.annualFee;
+        const netValue = signupBonus + creditsValue - (card.isAnnualFeeWaived ? 0 : card.annualFee);
     return { name: card.name, netValue};
   });
 
