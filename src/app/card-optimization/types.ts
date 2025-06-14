@@ -25,7 +25,7 @@ export interface RecommendationResult {
   selectedCards: {
     card: ScoredCard;
     openSchedule: string;
-
+    details: string;
   }[];
   totalValue: number;
   analysis: string[];
@@ -35,8 +35,11 @@ export interface ScoredCard {
   card: CreditCardType;
   score: number;
   details: {
-    netValue: number;
     offer: OfferType | null;
+    netValue: number;
+    offerValue: number;
+    creditsValue: number;
+    spendingValue: number;
   };
 }
 

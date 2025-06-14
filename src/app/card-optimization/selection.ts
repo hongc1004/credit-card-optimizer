@@ -69,7 +69,8 @@ export function selectWithConstraints(
   }
   const selectedCards = schedule.map(s => ({
     card: s.card,
-    openSchedule: new Date(now.getFullYear(), now.getMonth() + s.month, now.getDate()).toISOString().slice(0, 10)
+    openSchedule: new Date(now.getFullYear(), now.getMonth() + s.month, now.getDate()).toISOString().slice(0, 10),
+    details: generateDetailsForCard(s.card),
   }));
   return {
     selectedCards,
@@ -103,3 +104,25 @@ function isEligibleForIssuer(
     c && (plannedOpenDate.getTime() - c.getTime()) / (1000*60*60*24) < 180
   ).length >= 1;
 }
+
+function generateDetailsForCard(card: ScoredCard): string {
+  const { offer, offerValue, creditsValue, spendingValue } = card.details;
+  const annualFee = card.card.isAnnualFeeWaived ? 0 : card.card.annualFee;
+  let offerAmount = 0;
+  let offerCurrency = card.card.currency;
+  if (offer && Array.isArray(offer.amount) && offer.amount.length > 0) {
+    offerAmount = offer.amount[0].amount ?? 0;
+    offerCurrency = offer.amount[0].currency || card.card.currency;
+  }
+
+  let details = `Annual Fee: $${annualFee}\n`;
+  if (offer) {
+    details += `Offer: ${offerAmount} ${offerCurrency !== 'USD' ? 'points' : 'dollars'} from Signup Bonus\n`;
+    details += `\n`;
+  }
+  details += `Offer Value: $${offerValue.toFixed(2)}\n`;
+  details += `Credits Value: $${creditsValue.toFixed(2)}\n`;
+  details += `Spending Value: $${spendingValue.toFixed(2)}\n`;
+  return details;
+}
+

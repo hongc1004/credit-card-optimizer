@@ -4,19 +4,11 @@ import { CardCurrency, CreditCardType, CreditType, OfferType, RewardPreference, 
 // consider annual fee, spending requirements, signup bonus, preferred currency
 export function scoreCards(cards: CreditCardType[], upcomingSpend: number, rewardPreference: RewardPreference, preferredCurrency: CardCurrency[]): ScoredCard[] {
     return cards.map((card) => {
-        const {offer, netValue, score} = calculateCardValue(card, upcomingSpend, card.currency, rewardPreference, preferredCurrency);
-        return {
-            card,
-            score,
-            details: {
-                netValue,
-                offer,
-            }
-        };
+        return scoreCard(card, upcomingSpend, card.currency, rewardPreference, preferredCurrency);
     });
 }
 
-function calculateCardValue(card: CreditCardType, upcomingSpend: number, defaultCurrency: CardCurrency, rewardPreference: RewardPreference, preferredCurrency: CardCurrency[]): {offer: OfferType | null, netValue: number, score: number} {
+function scoreCard(card: CreditCardType, upcomingSpend: number, defaultCurrency: CardCurrency, rewardPreference: RewardPreference, preferredCurrency: CardCurrency[]): ScoredCard {
   const {bestOffer, offerValue} = getSignupBonusValue(card.offers, upcomingSpend, defaultCurrency, rewardPreference, card.universalCashbackPercent);
   const creditsValue = getValueFromCredits(card.credits || [], defaultCurrency);
   const annualFee = card.isAnnualFeeWaived ? 0 : card.annualFee;
@@ -24,7 +16,7 @@ function calculateCardValue(card: CreditCardType, upcomingSpend: number, default
   const netValue = offerValue + creditsValue + spendingValue - annualFee;
   const score = rewardPreference === RewardPreference.Points ? netValue * getBonusValueFromCurrency(defaultCurrency, preferredCurrency) : netValue;
 
-  return {offer: bestOffer, netValue, score};
+  return {card, score, details: {offer: bestOffer, netValue, offerValue, spendingValue, creditsValue}};
 }
 
 function getSignupBonusValue(offers: OfferType[], upcomingSpend: number, defaultCurrency: CardCurrency, rewardPreference: RewardPreference, cashbackPercent: number): {bestOffer: OfferType | null, offerValue: number} {
