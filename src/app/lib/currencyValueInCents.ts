@@ -1,4 +1,4 @@
-import type { CardCurrency } from "./data";
+import type { CardCurrency } from "@/app/card-optimization/types";
 
 // mapping from CardCurrency enum to point value in cents
 export const currencyValueInCents: Record<CardCurrency, number> = {
@@ -48,3 +48,7 @@ export const currencyValueInCents: Record<CardCurrency, number> = {
   "EXPEDIA": 1.0,
   "USD": 100.0, // 1 point = $1 USD
 };
+
+export const bonusValueForCurrency = 5; // 5x value if it's preferred currency
+
+export const spendingPoints = 1; // 1 point per dollar spent

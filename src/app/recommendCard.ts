@@ -1,5 +1,6 @@
-import { CardCurrency, CreditCardType, SimpleCardType, getCreditCards } from "@/app/lib/data";
+import { getCreditCards } from "@/app/lib/data";
 import { currencyValueInCents } from "./lib/currencyValueInCents";
+import { CardCurrency, CreditCardType, SimpleCardType } from "./card-optimization/types";
 
 export type OfferType = CreditCardType['offers'][number];
 export type CreditType = CreditCardType['credits'][number];

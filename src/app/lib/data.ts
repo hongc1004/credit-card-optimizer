@@ -1,16 +1,4 @@
-
-import type { components } from '@/types/api.d.ts';
-
-// Example: type for GET /cards
-export type CreditCardType = components['schemas']['CreditCard'];
-export type OfferAmount = components['schemas']['OfferAmount'];
-export type CardCurrency = components['schemas']['CurrenciesEnum'];
-
-export type SimpleCardType = {
-  cardId: string;
-  name: string;
-  issuer: string;
-};
+import { CreditCardType } from "../card-optimization/types";
 
 // Fetch data and parse with type
 export async function getCreditCards(): Promise<CreditCardType[]> {
