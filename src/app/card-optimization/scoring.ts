@@ -24,6 +24,9 @@ function getSignupBonusValue(offers: OfferType[], upcomingSpend: number, default
     let bestOffer = null;
     
     for (const offer of offers) {
+        if (offer.spend == 0.01) {
+            offer.spend = 0; // Treat 0.01 as no spending requirements
+        }
         if (upcomingSpend >= offer.spend) {
             for (const amount of offer.amount) {
                 const currency = amount.currency || defaultCurrency;

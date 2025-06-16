@@ -13,7 +13,6 @@ export async function optimizeCards(
   rewardPreference: RewardPreference,
   preferredCurrency?: CardCurrency[],
 ): Promise<RecommendationResult> {
-    console.log("Existing Cards:", existingCards);
     const availableCards = await getCreditCards();
 
     const eligibleCards = filterEligibleCards(availableCards, existingCards, includeBusiness);
