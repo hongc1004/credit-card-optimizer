@@ -12,7 +12,7 @@ export default function Home() {
   const [cardList, setCardList] = useState<UserCardProfile[]>([]);
   const [spend, setSpend] = useState<number>(0);
   const [newOpenDate, setNewOpenDate] = useState<string>("");
-  const [maxCards, setMaxCards] = useState<number>(3);
+  const [maxCards, setMaxCards] = useState<number>(4);
   const [includeBusiness, setIncludeBusiness] = useState<boolean>(false);
   const [rewardPreference, setRewardPreference] = useState<RewardPreference>(RewardPreference.Points);
   const [openDetailsCardId, setOpenDetailsCardId] = useState<string | null>(null);
@@ -138,7 +138,9 @@ export default function Home() {
             />
           </div>
           <div style={{ flex: 1, minWidth: 220 }}>
-            <label htmlFor="max-cards" style={{ fontWeight: 600, color: '#111' }}>Max Cards to Open in a Year: </label>
+            <label htmlFor="max-cards" style={{ fontWeight: 600, color: '#111' }}>
+              Max Cards to Open in a Year:
+            </label>
             <input
               id="max-cards"
               type="number"
