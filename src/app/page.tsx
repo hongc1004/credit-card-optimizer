@@ -125,7 +125,7 @@ export default function Home() {
         </div>
         <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
           <div style={{ flex: 1, minWidth: 220 }}>
-            <label htmlFor="spend-amount" style={{ fontWeight: 600, color: '#111' }}>Planned Spend Amount ($): </label>
+            <label htmlFor="spend-amount" style={{ fontWeight: 600, color: '#111' }}>Planned Yearly Spend Amount ($): </label>
             <input
               id="spend-amount"
               type="number"
@@ -186,7 +186,16 @@ export default function Home() {
           <ul style={{ padding: 0, listStyle: 'none' }}>
             {recommendation.selectedCards.map((card) => (
               <li key={card.card.card.cardId} style={{ marginBottom: 18, padding: 12, background: '#fff', borderRadius: 6, boxShadow: '0 1px 4px rgba(0,0,0,0.04)', display: 'flex', flexDirection: 'column', gap: 4, color: '#111', position: 'relative' }}>
-                <span style={{ fontWeight: 600, fontSize: 16 }}>{card.card.card.issuer} {card.card.card.name}</span>
+                <span style={{ fontWeight: 600, fontSize: 16 }}>
+                  <a
+                    href={card.card.card.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: '#1976d2', textDecoration: 'none' }}
+                  >
+                    {card.card.card.issuer} {card.card.card.name}
+                  </a>
+                </span>
                 <span style={{ color: '#111' }}>Open Date: <b>{card.openSchedule}</b></span>
                 <span style={{ color: '#111', display: 'flex', alignItems: 'center', gap: 6 }}>
                   Spend: <b>${card.card.details.offer?.spend || 0}</b> | Net Value: <b>${card.card.details.netValue.toFixed(2)}</b>
